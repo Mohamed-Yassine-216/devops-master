@@ -238,32 +238,6 @@ jobs:
             reports/pip-audit-report.json
             reports/trivy-fs-report.json
           if-no-files-found: ignore
-
-  # ---------------------------------------------------------------------------
-  # 5. Optional: Deploy to Vercel (runs only on main/master)
-  # ---------------------------------------------------------------------------
-  deploy_vercel:
-    name: "5 · Deploy to Vercel"
-    runs-on: ubuntu-latest
-    needs: [scan_dependencies]
-    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install Vercel CLI
-        run: npm install -g vercel
-
-      - name: Deploy to Vercel
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: |
-          # Requires you to set repository secret VERCEL_TOKEN (personal token)
-          # The CLI will use the linked project in the repo or prompt; --confirm
-          # and --prod make this non-interactive and deploy to production.
-          vercel --prod --token "$VERCEL_TOKEN" --confirm
+  # Note: Deployment to Vercel is handled by Vercel's GitHub integration
+  # (no token required in the workflow for public repos). Keep using Vercel
+  # auto-deploys via the project's GitHub integration instead of a CLI token.
